@@ -104,7 +104,7 @@ export default {
         isEdit: false,
         selectedItem: {},
         items: [],
-        url: "http://localhost:8080/api/items/"
+        url: "https://we-game-api.onrender.com/api/"
       }
     },
     methods: {
@@ -113,11 +113,11 @@ export default {
         console.log('selectedItem', this.selectedItem)
       },
       async getItems() {
-        this.items = (await axios.get(this.url)).data
+        this.items = (await axios.get(this.url+'items/')).data
       },
       async onEdit(user) {
         console.log('user', user)
-          await axios.put(this.url, user)
+          await axios.put(this.url+'items/', user)
           this.getItems()
       },
       async editUser(user){
