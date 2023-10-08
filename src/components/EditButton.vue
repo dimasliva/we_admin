@@ -77,7 +77,7 @@ export default {
   border-radius: 12px;
   font-size: 1.1rem;
   color: white;
-  background: hsl(140, 100%, 47%);
+  background: hsl(140, 78%, 42%);
   will-change: transform;
   transform: translateY(-4px);
   transition:
@@ -133,7 +133,7 @@ export default {
   <span class="button-82-shadow"></span>
   <span class="button-82-edge"></span>
   <span class="button-82-front text">
-    Изменить
+    Сохранить
   </span>
 </button>
 </template>
