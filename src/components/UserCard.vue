@@ -121,6 +121,22 @@ export default {
         <span>Водительские права</span>
         <input class="input right" v-model="user.drivecategory">
       </div>
+      <!-- <div class="coords">
+        <span>Удача</span>
+        <input class="input right" v-model="user.lucky">
+      </div>
+      <div class="coords">
+        <span>Чистота</span>
+        <input class="input right" v-model="user.dirty">
+      </div>
+      <div class="coords">
+        <span>Интеллект</span>
+        <input class="input right" v-model="user.intellect">
+      </div>
+      <div class="coords">
+        <span>Профессия</span>
+        <input class="input right" v-model="user.profession">
+      </div> -->
       <div class="stats">
         <div>
           <div class="title">ХП</div>

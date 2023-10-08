@@ -36,7 +36,7 @@
 
     <div class="wrapper" v-else-if="currentPage === 'items'">
       <span>search field:</span>
-      <select v-model="searchField">
+      <select v-model="searchFieldItems">
         <option>id</option>
         <option>name</option>
       </select>
@@ -48,23 +48,19 @@
       <EasyDataTable
         v-model:items-selected="itemsSelected"
         show-index
-        :headers="headers"
+        :headers="headersItems"
         :items="items"
         :search-field="searchField"
         :search-value="searchValue"
         @click-row="showRow"
       />
-      <div class="card">
-        <UserCard 
-          :selectedItem="selectedItem"
-          :isEdit="isEdit"
-          @onEdit="onEdit"
 
+      <AddForm 
+        :selectedItem="selectedItem"
+        @onAdd="onAdd"
+        @onEdit="onEditItem"
+        @onDelete="onDeleteItem"
         />
-      </div>
-      <div class="btns">
-
-      </div>
     </div>
   </div>
 
@@ -74,31 +70,37 @@
 <script>
 import axios from "axios";
 import UserCard from "@/components/UserCard.vue";
+import AddForm from "@/components/AddForm.vue";
 
 export default {
     name: 'adminitems',
-    components: { UserCard},
+    components: {AddForm, UserCard},
     data () {
       return {
         currentPage: "users",
         searchField: "",
         searchValue: "",
+        searchFieldItems: "",
         headers:  [
           { text: "id", value: "id", sortable: true },
-          { text: "name", value: "name", sortable: true},
-          { text: "money", value: "money", sortable: true},
-          { text: "weight", value: "weight", sortable: true},
-          { text: "age", value: "age", sortable: true},
-          { text: "energy", value: "energy", sortable: true},
-          { text: "health", value: "health", sortable: true},
-          { text: "hungry", value: "hungry", sortable: true},
-          { text: "power", value: "power", sortable: true},
-          { text: "intellect", value: "intellect", sortable: true},
-          { text: "lucky", value: "lucky", sortable: true},
-          { text: "dirty", value: "dirty", sortable: true},
-          { text: "drivecategory", value: "drivecategory", sortable: true},
-          { text: "profession", value: "profession", sortable: true},
-          { text: "created_at", value: "created_at", sortable: true},
+          { text: "Имя", value: "name", sortable: true},
+          { text: "Деньги", value: "money", sortable: true},
+          { text: "Вес", value: "weight", sortable: true},
+          { text: "Возраст", value: "age", sortable: true},
+          { text: "Энергия", value: "energy", sortable: true},
+          { text: "Здоровье", value: "health", sortable: true},
+          { text: "Голод", value: "hungry", sortable: true},
+          { text: "Сила", value: "power", sortable: true},
+          { text: "Интеллект", value: "intellect", sortable: true},
+          { text: "Удача", value: "lucky", sortable: true},
+          { text: "Чистота", value: "dirty", sortable: true},
+          { text: "Водительские права", value: "drivecategory", sortable: true},
+          { text: "Профессия", value: "profession", sortable: true},
+          { text: "Дата создания", value: "created_at", sortable: true},
+        ],
+        headersItems:  [
+          { text: "id", value: "id", sortable: true },
+          { text: "Название", value: "name", sortable: true},
         ],
         isSelected: false,
         isEdit: false,
@@ -110,25 +112,44 @@ export default {
     methods: {
       showRow (val) {
         this.selectedItem = val
-        console.log('selectedItem', this.selectedItem)
+      },
+      async getUsers() {
+        this.items = (await axios.get(this.url+'users/')).data
       },
       async getItems() {
         this.items = (await axios.get(this.url+'items/')).data
       },
       async onEdit(user) {
-        console.log('user', user)
-          await axios.put(this.url+'items/', user)
-          this.getItems()
+          await axios.put(this.url+'users/', user)
+          this.getUsers()
       },
-      async editUser(user){
+      editUser(user){
         this.selectedItem = user
       },
+      async onAdd(item) {
+        await axios.post(this.url+'items/', {name: item.name})
+        this.getItems()
+      },
+      async onDeleteItem(item) {
+        await axios.delete(this.url+'items/' + item.id)
+        this.getItems()
+      },
+      async onEditItem(item) {
+        await axios.put(this.url+'items/', item)
+        this.selectedItem = ''
+        this.getItems()
+      },
       toPage(page) {
+        if(page === 'users') {
+          this.getUsers()
+        } else if(page === 'items') {
+          this.getItems()
+        }
         this.currentPage = page
       }
     },
     mounted() {
-      this.getItems()
+      this.getUsers()
     }
 }
 </script>
