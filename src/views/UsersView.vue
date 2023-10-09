@@ -57,7 +57,7 @@
 
       <AddForm 
         :selectedItem="selectedItem"
-        @onAdd="onAdd"
+        @onAdd="onAddItem"
         @onEdit="onEditItem"
         @onDelete="onDeleteItem"
         />
@@ -101,6 +101,8 @@ export default {
         headersItems:  [
           { text: "id", value: "id", sortable: true },
           { text: "Название", value: "name", sortable: true},
+          { text: "Описание", value: "description", sortable: true},
+          { text: "Категория", value: "category", sortable: true},
         ],
         isSelected: false,
         isEdit: false,
@@ -126,8 +128,8 @@ export default {
       editUser(user){
         this.selectedItem = user
       },
-      async onAdd(item) {
-        await axios.post(this.url+'items/', {name: item.name})
+      async onAddItem(item) {
+        await axios.post(this.url+'items/', item)
         this.getItems()
       },
       async onDeleteItem(item) {
@@ -135,6 +137,7 @@ export default {
         this.getItems()
       },
       async onEditItem(item) {
+        console.log('item', item)
         await axios.put(this.url+'items/', item)
         this.selectedItem = ''
         this.getItems()

@@ -6,40 +6,53 @@ export default {
         item: {
           id: '',
           name: '',
+          description: '',
+          category: ''
         },
         isEdit: false
       }
     },
     methods: {
+      itemEmpty() {
+        this.item = {
+          id: '',
+          name: '',
+          description: '',
+          category: ''
+        }
+      },
       onAdd() {
         this.$emit('onAdd', this.item)
-        this.item = ''
+        this.itemEmpty()
       },
       onDelete() {
         this.$emit('onDelete', this.item)
-        this.item = ''
+        this.itemEmpty()
       },
       onEdit() {
         this.$emit('onEdit', this.item)
+        this.itemEmpty()
       },
     },
     watch: {
       item: {
         handler() {
-          if(this.item.name === '') {
-            this.item.id = ''
+          if(this.item.id === '') {
             this.isEdit = false
           }
-          console.log(this.item.name)          
         },
         deep: true
       },
       selectedItem: function(newVal, oldVal) {
         this.item = {
           id: this.selectedItem.id,
-          name: this.selectedItem.name
+          name: this.selectedItem.name,
+          description: this.selectedItem.description,
+          category: this.selectedItem.category
         }
-        this.isEdit = true
+        if(this.item.name.length > 0) {
+          this.isEdit = true
+        }
       },
     }
 }
@@ -50,13 +63,19 @@ export default {
 
     <section>
       <div class="href-target" id="input-types"></div>
-      <h1>
-        Добавить предмет
-      </h1>
+      <h1>Добавить предмет</h1>
 
       <div class="nice-form-group">
         <label>Название</label>
         <input type="text" placeholder="Название предмета" v-model="item.name" />
+      </div>
+      <div class="nice-form-group">
+        <label>Описание</label>
+        <input type="text" placeholder="Описание предмета" v-model="item.description" />
+      </div>
+      <div class="nice-form-group">
+        <label>Категория</label>
+        <input type="text" placeholder="Категория предмета" v-model="item.category" />
       </div>
       <details>
         <summary>
